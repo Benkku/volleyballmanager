@@ -7,11 +7,9 @@ def main():
     # For example, create teams, players, etc.
     team1_name = "Team A"
     team2_name = "Team B"
-    team1 = team1_name
-    team2 = team2_name
 
     # Create a match instance
-    match = Match(team1, team2)
+    match = Match(team1_name, team2_name)
 
     # Start the match
     match.start_match()
@@ -22,9 +20,9 @@ def main():
         # For example, handle user input, update match status, etc.
 
         # Example: Simulate some points being scored
-        match.point_scored(team1)
-        match.point_scored(team2)
-        match.point_scored(team1)
+        match.set_scored(team1_name)
+        match.set_scored(team1_name)
+        match.set_scored(team2_name)
 
         # Display match score
         match.display_score()
