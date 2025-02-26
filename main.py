@@ -20,12 +20,13 @@ def main():
         # For example, handle user input, update match status, etc.
 
         # Example: Simulate some points being scored
-        match.set_scored(team1_name)
-        match.set_scored(team1_name)
-        match.set_scored(team2_name)
+        match.point_scored(team1_name)
+     #   match.set_scored(team1_name)
+        match.point_scored(team2_name)
 
         # Display match score
-        match.display_score()
+        match.display_sets()
+        match.display_scores()
 
         # Check if the match is over
         if match.current_state == 'finished':
