@@ -15,14 +15,15 @@ def main():
     match.start_match()
 
     # Main game loop
+    points = 0
     while match.current_state != 'finished':
         # Update game state
         # For example, handle user input, update match status, etc.
+        points = points + 1
+        print(f"Points: {points}")
 
         # Example: Simulate some points being scored
-        match.point_scored(team1_name)
-     #   match.set_scored(team1_name)
-        match.point_scored(team2_name)
+        match.play_point_action()
 
         # Display match score
         match.display_sets()
