@@ -1,15 +1,17 @@
 # Import necessary modules and classes
 from match import Match
+from match import Team
+from match import Player
 # Import other game components as needed
 
 def main():
     # Initialize game components
     # For example, create teams, players, etc.
-    team1_name = "Team A"
-    team2_name = "Team B"
+    team1 = Team("Team A", 70)
+    team2 = Team("Team B", 70)
 
     # Create a match instance
-    match = Match(team1_name, team2_name)
+    match = Match(team1, team2)
 
     # Start the match
     match.start_match()
@@ -30,7 +32,7 @@ def main():
         match.display_scores()
 
         # Check if the match is over
-        if match.current_state == 'finished':
+        if (match.current_state == 'finished') or (points == 200):
             print("Match is over!")
             break
 
