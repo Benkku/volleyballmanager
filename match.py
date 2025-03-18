@@ -1,5 +1,5 @@
 import random
-from transitions import Machine
+from transitions import Machine, State
 
 
 class Match:
@@ -19,9 +19,12 @@ class Match:
         self.machine.add_transition(trigger='start_match', source='not_started', dest='in_progress')
         self.machine.add_transition(trigger='end_match', source='in_progress', dest='finished')
 
-    def play_point_action(self):
-        winner = random.choices([self.team1, self.team2], weights=[self.team1.sideout_efficiency, self.team2.sideout_efficiency], k=1)[0]
+    def play_point_action(self, serving_team, receiving_team):
+       # winner = random.choices([self.team1, self.team2], weights=[self.team1.sideout_efficiency, self.team2.sideout_efficiency], k=1)[0]
+        rally= Rally(serving_team, receiving_team)
+        winner=rally
         self.point_scored(winner)
+        return winner
 
     def point_scored(self, team):
         if self.set_in_progress == 1:
@@ -39,8 +42,6 @@ class Match:
                 self.set_scored(team)
             else:
                 self.set3.point_scored(team)
-                print(f"set_in_progress == 3")
-        print(f"Point scored: Sets Team1: {self.sets_team1} - Team2: {self.sets_team2}, set_in_progress: {self.set_in_progress}")
 
     def set_scored(self, team):
         if team == self.team1:
@@ -54,11 +55,10 @@ class Match:
             self.current_state = 'finished'
         else:
             self.set_in_progress += 1
-        print(f"self.set_in_progress: {self.set_in_progress}")
         print(f"Set scored: Team1: {self.sets_team1} - Team2: {self.sets_team2}")
 
     def display_sets(self):
-        print(f"Sets: {self.team1}: {self.sets_team1} - {self.team2}: {self.sets_team2}")
+        print(f"Sets: Team1: {self.sets_team1} - Team2: {self.sets_team2}")
 
     def display_scores(self):
         print(f"Set1: Team1: {self.set1.score_team1} - Team2: {self.set1.score_team2}")
@@ -102,6 +102,7 @@ class Set:
 class Team:
 
     def __init__(self, name, sideout_efficiency):
+        self.name = name
         self.sideout_efficiency = sideout_efficiency
         self.player1 = Player("Pekka", sideout_efficiency)
         self.player2 = Player("Kimmo", sideout_efficiency)
@@ -111,3 +112,27 @@ class Player:
     def __init__(self, name, sideout_efficiency):
         self.sideout_efficiency = sideout_efficiency
         self.name = name
+
+class Rally(object):
+    states = ["serve", "end"]
+    ball_action_states = ["failure", "bad","good", "perfect"]
+
+    def __init__(self, serving_team, receiving_team):
+        self.serving_team=serving_team
+        self.receiving_team=receiving_team
+        self.machine = Machine(model=self, states=Rally.states, initial="serve")
+        self.machine.add_transition("ace", "serve", "end", after="server_wins")
+        self.machine.add_transition("serve_fail", "serve", "end", after="receiver_wins")
+
+    def play_rally(self):
+        stronger = random.choices([self.serving_team, self.receiving_team], weights=[self.serving_team.sideout_efficiency, self.receiving_team.sideout_efficiency], k=1)[0]
+        if stronger == self.serving_team:
+            self.ace()
+        else:
+            self.serve_fail()
+
+    def server_wins(self):
+        return self.serving_team
+
+    def receiver_wins(self):
+        return self.receiving_team

@@ -1,4 +1,4 @@
-# Import necessary modules and classes
+import random
 from match import Match
 from match import Team
 from match import Player
@@ -12,20 +12,24 @@ def main():
 
     # Create a match instance
     match = Match(team1, team2)
-
-    # Start the match
-    match.start_match()
+    serving_team = team1
+#    serving_team = random.choices([team1, team2])
 
     # Main game loop
     points = 0
     while match.current_state != 'finished':
-        # Update game state
-        # For example, handle user input, update match status, etc.
+
         points = points + 1
         print(f"Points: {points}")
+        print(f"Serving: {serving_team.name}")
+        if serving_team == team1:
+            receiving_team = team2
+        else:
+            receiving_team = team1
 
         # Example: Simulate some points being scored
-        match.play_point_action()
+        serving_team = match.play_point_action(serving_team, receiving_team)
+        print(f"Point winner: {serving_team.name}")
 
         # Display match score
         match.display_sets()
