@@ -1,5 +1,6 @@
 import random
 from transitions import Machine, State
+from rally import Rally
 
 
 class Match:
@@ -22,7 +23,7 @@ class Match:
     def play_point_action(self, serving_team, receiving_team):
        # winner = random.choices([self.team1, self.team2], weights=[self.team1.sideout_efficiency, self.team2.sideout_efficiency], k=1)[0]
         rally= Rally(serving_team, receiving_team)
-        winner=rally
+        winner=rally.play_rally()
         self.point_scored(winner)
         return winner
 
@@ -65,6 +66,9 @@ class Match:
         print(f"Set2: Team1: {self.set2.score_team1} - Team2: {self.set2.score_team2}")
         print(f"Set3: Team1: {self.set3.score_team1} - Team2: {self.set3.score_team2}")
 
+
+
+
 class Set:
     states = ['set_not_started', 'set_in_progress', 'set_finished']
 
@@ -81,6 +85,7 @@ class Set:
 
     def point_scored(self, team):
         self.current_state = 'set_in_progress'
+        print(f"Team scored: {team.name}")
         if team == self.team1:
             self.score_team1 += 1
         elif team == self.team2:
@@ -101,38 +106,14 @@ class Set:
 
 class Team:
 
-    def __init__(self, name, sideout_efficiency):
+    def __init__(self, name, skill_data):
         self.name = name
-        self.sideout_efficiency = sideout_efficiency
-        self.player1 = Player("Pekka", sideout_efficiency)
-        self.player2 = Player("Kimmo", sideout_efficiency)
+        self.skill_data = skill_data
+        self.player1 = Player("Pekka", skill_data)
+        self.player2 = Player("Kimmo", skill_data)
 
 class Player:
 
-    def __init__(self, name, sideout_efficiency):
-        self.sideout_efficiency = sideout_efficiency
+    def __init__(self, name, skill_data):
+        self.skill_data = skill_data
         self.name = name
-
-class Rally(object):
-    states = ["serve", "end"]
-    ball_action_states = ["failure", "bad","good", "perfect"]
-
-    def __init__(self, serving_team, receiving_team):
-        self.serving_team=serving_team
-        self.receiving_team=receiving_team
-        self.machine = Machine(model=self, states=Rally.states, initial="serve")
-        self.machine.add_transition("ace", "serve", "end", after="server_wins")
-        self.machine.add_transition("serve_fail", "serve", "end", after="receiver_wins")
-
-    def play_rally(self):
-        stronger = random.choices([self.serving_team, self.receiving_team], weights=[self.serving_team.sideout_efficiency, self.receiving_team.sideout_efficiency], k=1)[0]
-        if stronger == self.serving_team:
-            self.ace()
-        else:
-            self.serve_fail()
-
-    def server_wins(self):
-        return self.serving_team
-
-    def receiver_wins(self):
-        return self.receiving_team

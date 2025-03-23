@@ -2,13 +2,19 @@ import random
 from match import Match
 from match import Team
 from match import Player
-# Import other game components as needed
 
 def main():
     # Initialize game components
     # For example, create teams, players, etc.
-    team1 = Team("Team A", 70)
-    team2 = Team("Team B", 70)
+    team1_serve = {'fail': 10, 'bad': 20, 'good': 50, 'perfect': 20}
+    team1_receive = {'fail': 10, 'bad': 30, 'good': 30, 'perfect': 30}
+    team1_skills = {'serve': team1_serve, 'receive': team1_receive}
+    team2_serve = {'fail':15,'bad':10,'good':40,'perfect':35}
+    team2_receive = {'fail':15,'bad':25,'good':40,'perfect':20}
+    team2_skills = {'serve':team1_serve,'receive':team1_receive}
+
+    team1 = Team("Team A", team1_skills)
+    team2 = Team("Team B", team2_skills)
 
     # Create a match instance
     match = Match(team1, team2)
@@ -41,7 +47,6 @@ def main():
             break
 
     # End the match
-    match.end_match()
 
 if __name__ == "__main__":
     main()
