@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Volleyball Simulator</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Volleyball Simulator</h1>
+
+    <div class="panel">
+      <label>Team A name: <input id="teamAName" value="Team A" /></label>
+      <label>Strength: <input id="teamAStr" type="number" min="1" max="10" value="6" /></label>
+    </div>
+
+    <div class="panel">
+      <label>Team B name: <input id="teamBName" value="Team B" /></label>
+      <label>Strength: <input id="teamBStr" type="number" min="1" max="10" value="5" /></label>
+    </div>
+
+    <div class="panel">
+      <label>Sets to win: <input id="setsTo" type="number" min="1" max="5" value="3" /></label>
+    </div>
+
+    <div class="panel">
+      <button id="runBtn">Run Simulation</button>
+    </div>
+
+    <div id="result" class="panel"></div>
+
+    <h2>Events</h2>
+    <pre id="events" class="events"></pre>
+  </div>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
